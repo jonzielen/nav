@@ -1,12 +1,18 @@
 <?php
+    function removeKeySlash($text) {
+        return preg_replace('/\//', '-', $text);
+    }
+
     function replaceChar($text) {
         $replace = [];
-        // $replace[0] = '/\//';
-        // $replace[1] = '/\(.*?\)/';
+        $replace[0] = '/\(.*?\)/';
+        $replace[1] = '/&/';
+        $replace[2] = '/ +/';
 
         $replacement = [];
-        // $replacement[0] = '-';
-        // $replacement[1] = '';
+        $replacement[0] = '';
+        $replacement[1] = '';
+        $replacement[2] = ' ';
 
         $text = preg_replace($replace, $replacement, $text);
 
@@ -210,30 +216,33 @@
         ]
     ];
 
+
+
     function loopArray($baseUrl, $navVal) {
+        $navBuild = '';
+        $navUrlArray = [];
+
         foreach ($navVal as $key => $value) {
             if (is_string($key)) {
+                $navBuild .= '<li>'.linkReplace($baseUrl.removeKeySlash($key), $key).'</li>';
                 $baseUrl .= $key.'/';
-                echo '<li>'.linkReplace($baseUrl.$key, $key).'</li>';
             }
 
             if (is_numeric($key)) {
-                echo '<li>'.linkReplace($baseUrl.$value, $value).'</li>';
+                $navBuild .= '<li>'.linkReplace($baseUrl.removeKeySlash($value), $value).'</li>';
             }
 
             if (is_array($value)) {
-                echo '<ul>';
-                loopArray($baseUrl, $value);
-                echo '</ul>';
+                $navBuild .= '<ul>'.loopArray($baseUrl, $value).'</ul>';
                 $baseUrl = '';
             }
         }
+
+        return $navBuild;
     }
 
     function parseNav($nav) {
-        echo '<ul>';
-        loopArray('', $nav);
-        echo '</ul>';
+        return '<ul>'.loopArray('', $nav).'</ul>';
     }
 ?>
 <!DOCTYPE html>
@@ -241,14 +250,17 @@
     <head>
         <meta charset="utf-8">
         <title>test nav</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" charset="utf-8">
     </head>
     <body>
         <header>
             <nav>
-                <?php parseNav($nav); ?>
+                <?php echo parseNav($nav); ?>
             </nav>
         </header>
-
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script>
             var a = document.getElementsByTagName("A");
 
