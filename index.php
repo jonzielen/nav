@@ -216,7 +216,7 @@
         ]
     ];
 
-    function loopArray($baseUrl, $navVal) {
+    function buildNav($baseUrl, $navVal) {
         $navBuild = '';
 
         foreach ($navVal as $key => $value) {
@@ -230,7 +230,7 @@
             }
 
             if (is_array($value)) {
-                $navBuild .= '<ul>'.loopArray($baseUrl, $value).'</ul>';
+                $navBuild .= '<ul>'.buildNav($baseUrl, $value).'</ul>';
                 //$baseUrl = '';
             }
         }
@@ -243,7 +243,7 @@
     }
 
     function parseNav($nav) {
-        return '<ul>'.loopArray('', $nav).'</ul>';
+        return '<ul>'.buildNav('', $nav).'</ul>';
     }
 ?>
 <!DOCTYPE html>
