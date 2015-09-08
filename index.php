@@ -216,11 +216,8 @@
         ]
     ];
 
-
-
     function loopArray($baseUrl, $navVal) {
         $navBuild = '';
-        $navUrlArray = [];
 
         foreach ($navVal as $key => $value) {
             if (is_string($key)) {
@@ -234,9 +231,13 @@
 
             if (is_array($value)) {
                 $navBuild .= '<ul>'.loopArray($baseUrl, $value).'</ul>';
-                $baseUrl = '';
+                //$baseUrl = '';
             }
         }
+
+        echo '<pre>';
+        print_r($baseUrl);
+        echo '</pre>';
 
         return $navBuild;
     }
@@ -258,7 +259,7 @@
                 <?php echo parseNav($nav); ?>
             </nav>
         </header>
-        
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script>
