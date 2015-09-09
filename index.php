@@ -1,5 +1,7 @@
 <?php
-    include_once 'php/nav-builder.php';
+    include_once 'php/nav-array.php';
+    include_once 'php/class.navbuilder.php';
+    $navigation = new navbuilderjz\Navbuilder($nav);
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,7 +29,7 @@
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="mainNav">
-                  <?php echo parseNav($nav); ?>
+                  <?php echo $navigation; ?>
                 </div><!-- /.navbar-collapse -->
               </div><!-- /.container-fluid -->
             </nav>
