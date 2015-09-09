@@ -9,6 +9,7 @@ class Navbuilder
     public function __construct($navArray)
     {
         $this->navBuilder = '<ul class="nav navbar-nav">'.self::buildNav('', $navArray).'</ul>';
+        self::arrayLoop($navArray);
     }
 
     protected function removeKeySlash($text)
@@ -17,7 +18,7 @@ class Navbuilder
     }
 
     protected function replaceChar($text)
-    {    
+    {
         $replace[] = '/\(.*?\)/';
         $replace[] = '/&/';
         $replace[] = '/ +/';
@@ -63,11 +64,39 @@ class Navbuilder
 
             if (is_array($value)) {
                 $navBuild .= '<ul>'.self::buildNav($baseUrl, $value).'</ul></li>';
-                    //$baseUrl = '';
+                //$baseUrl = '';
             }
         }
 
         return $navBuild;
+    }
+
+    protected function arrayLoop($navVal) {
+        echo '<pre>';
+        //print_r($navVal);
+        echo '</pre>';
+
+        function moreLoop($navVal, $tryArray = []) {
+
+            foreach ($navVal as $key => $value) {
+                if (is_string($key)) {
+                    echo $key.'<br>';
+                    $tryArray[] = $key;
+                }
+
+                if (is_numeric($key)) {
+                    echo $value.'<br>';
+                    $tryArray[] = $value;
+                }
+
+
+                if (is_array($value)) {
+                    moreLoop($value, $tryArray);
+                }
+            }
+        }
+
+        moreLoop($navVal, '');
     }
 
     public function __toString()
