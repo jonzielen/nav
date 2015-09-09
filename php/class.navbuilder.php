@@ -17,16 +17,14 @@ class Navbuilder
     }
 
     protected function replaceChar($text)
-    {
-        $replace = [];
-        $replace[0] = '/\(.*?\)/';
-        $replace[1] = '/&/';
-        $replace[2] = '/ +/';
+    {    
+        $replace[] = '/\(.*?\)/';
+        $replace[] = '/&/';
+        $replace[] = '/ +/';
 
-        $replacement = [];
-        $replacement[0] = '';
-        $replacement[1] = '';
-        $replacement[2] = ' ';
+        $replacement[] = '';
+        $replacement[] = '';
+        $replacement[] = ' ';
 
         $text = preg_replace($replace, $replacement, $text);
 
