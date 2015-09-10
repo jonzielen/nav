@@ -73,6 +73,19 @@ class Navbuilder
 
     protected function arrayLoop($navVal) {
 
+        function loopCheck($newValue2, $navBuild) {
+            if (is_array($newValue2)) {
+                foreach ($newValue2 as $newKey3 => $newValue3) {
+                    if (is_string($newKey3)) {
+                        $navBuild .= $navBuild.' / '.$newKey3.'<br>';
+                    }
+                    if (is_numeric($newKey3)) {
+                        $navBuild .= $navBuild.' / '.$newValue3.'<br>';
+                    }
+                }
+            }
+        }
+
         function moreLoop($navVal, $tryArray) {
             $navBuild = '';
 
@@ -109,17 +122,9 @@ class Navbuilder
                                                 $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newValue3.'<br>';
                                             }
 
-                                            if (is_array($newValue3)) {
-                                                foreach ($newValue3 as $newKey4 => $newValue4) {
-                                                    if (is_string($newKey4)) {
-                                                        $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.' / '.$newKey4.'<br>';
-                                                    }
-                                                    if (is_numeric($newKey4)) {
-                                                        $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.' / '.$newValue4.'<br>';
-                                                    }
-                                                }
+                                            if (is_array($newValue2)) {
+                                                loopCheck($newValue2, $navBuild);
                                             }
-
                                         }
                                     }
 
