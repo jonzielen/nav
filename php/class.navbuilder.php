@@ -72,31 +72,73 @@ class Navbuilder
     }
 
     protected function arrayLoop($navVal) {
-        echo '<pre>';
-        //print_r($navVal);
-        echo '</pre>';
 
-        function moreLoop($navVal, $tryArray = []) {
+        function moreLoop($navVal, $tryArray) {
 
             foreach ($navVal as $key => $value) {
-                if (is_string($key)) {
-                    echo $key.'<br>';
-                    $tryArray[] = $key;
-                }
-
-                if (is_numeric($key)) {
-                    echo $value.'<br>';
-                    $tryArray[] = $value;
-                }
-
-
                 if (is_array($value)) {
-                    moreLoop($value, $tryArray);
+                    if (is_string($key)) {
+                        echo '- '.$key.'<br>';
+                        $tryArray[] = $key;
+                    }
+
+                    if (is_array($value)) {
+                        foreach ($value as $newKey => $newValue) {
+                            if (is_string($newKey)) {
+                                echo '-- '.$newKey.'<br>';
+                            }
+                            if (is_numeric($newKey)) {
+                                echo '-- '.$newValue.'<br>';
+                            }
+
+                            if (is_array($newValue)) {
+                                foreach ($newValue as $newKey2 => $newValue2) {
+                                    if (is_string($newKey2)) {
+                                        echo '--- '.$newKey2.'<br>';
+                                    }
+                                    if (is_numeric($newKey2)) {
+                                        echo '--- '.$newValue2.'<br>';
+                                    }
+
+                                    if (is_array($newValue2)) {
+                                        foreach ($newValue2 as $newKey3 => $newValue3) {
+                                            if (is_string($newKey3)) {
+                                                echo '---- '.$newKey3.'<br>';
+                                            }
+                                            if (is_numeric($newKey3)) {
+                                                echo '---- '.$newValue3.'<br>';
+                                            }
+
+                                            if (is_array($newValue3)) {
+                                                foreach ($newValue3 as $newKey4 => $newValue4) {
+                                                    if (is_string($newKey4)) {
+                                                        echo '----- '.$newKey4.'<br>';
+                                                    }
+                                                    if (is_numeric($newKey4)) {
+                                                        echo '----- '.$newValue4.'<br>';
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
                 }
             }
+            //moreLoop($value, $tryArray);
+
+            return $tryArray;
         }
 
-        moreLoop($navVal, '');
+        echo '<pre>';
+        print_r(moreLoop($navVal, array()));
+        echo '</pre>';
+
+        //moreLoop($navVal, '');
     }
 
     public function __toString()
