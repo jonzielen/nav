@@ -78,44 +78,43 @@ class Navbuilder
             foreach ($navVal as $key => $value) {
                 if (is_array($value)) {
                     if (is_string($key)) {
-                        echo '- '.$key.'<br>';
-                        $tryArray[] = $key;
+                        echo $key.'<br>';
                     }
 
                     if (is_array($value)) {
                         foreach ($value as $newKey => $newValue) {
                             if (is_string($newKey)) {
-                                echo '-- '.$newKey.'<br>';
+                                echo $key.' / '.$newKey.'<br>';
                             }
                             if (is_numeric($newKey)) {
-                                echo '-- '.$newValue.'<br>';
+                                echo $key.' / '.$newValue.'<br>';
                             }
 
                             if (is_array($newValue)) {
                                 foreach ($newValue as $newKey2 => $newValue2) {
                                     if (is_string($newKey2)) {
-                                        echo '--- '.$newKey2.'<br>';
+                                        echo $key.' / '.$newKey.' / '.$newKey2.'<br>';
                                     }
                                     if (is_numeric($newKey2)) {
-                                        echo '--- '.$newValue2.'<br>';
+                                        echo $key.' / '.$newKey.' / '.$newValue2.'<br>';
                                     }
 
                                     if (is_array($newValue2)) {
                                         foreach ($newValue2 as $newKey3 => $newValue3) {
                                             if (is_string($newKey3)) {
-                                                echo '---- '.$newKey3.'<br>';
+                                                echo $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.'<br>';
                                             }
                                             if (is_numeric($newKey3)) {
-                                                echo '---- '.$newValue3.'<br>';
+                                                echo $key.' / '.$newKey.' / '.$newKey2.' / '.$newValue3.'<br>';
                                             }
 
                                             if (is_array($newValue3)) {
                                                 foreach ($newValue3 as $newKey4 => $newValue4) {
                                                     if (is_string($newKey4)) {
-                                                        echo '----- '.$newKey4.'<br>';
+                                                        echo $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.' / '.$newKey4.'<br>';
                                                     }
                                                     if (is_numeric($newKey4)) {
-                                                        echo '----- '.$newValue4.'<br>';
+                                                        echo $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.' / '.$newValue4.'<br>';
                                                     }
                                                 }
                                             }
@@ -129,9 +128,6 @@ class Navbuilder
                     }
                 }
             }
-            //moreLoop($value, $tryArray);
-
-            return $tryArray;
         }
 
         echo '<pre>';
