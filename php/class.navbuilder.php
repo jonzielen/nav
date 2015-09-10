@@ -74,50 +74,52 @@ class Navbuilder
     protected function arrayLoop($navVal) {
 
         function moreLoop($navVal, $tryArray) {
+            $navBuild = '';
 
             foreach ($navVal as $key => $value) {
                 if (is_array($value)) {
                     if (is_string($key)) {
-                        echo $key.'<br>';
+                        $navBuild .= $key.'<br>';
                     }
 
                     if (is_array($value)) {
                         foreach ($value as $newKey => $newValue) {
                             if (is_string($newKey)) {
-                                echo $key.' / '.$newKey.'<br>';
+                                $navBuild .= $key.' / '.$newKey.'<br>';
                             }
                             if (is_numeric($newKey)) {
-                                echo $key.' / '.$newValue.'<br>';
+                                $navBuild .= $key.' / '.$newValue.'<br>';
                             }
 
                             if (is_array($newValue)) {
                                 foreach ($newValue as $newKey2 => $newValue2) {
                                     if (is_string($newKey2)) {
-                                        echo $key.' / '.$newKey.' / '.$newKey2.'<br>';
+                                        $navBuild .= $key.' / '.$newKey.' / '.$newKey2.'<br>';
                                     }
                                     if (is_numeric($newKey2)) {
-                                        echo $key.' / '.$newKey.' / '.$newValue2.'<br>';
+                                        $navBuild .= $key.' / '.$newKey.' / '.$newValue2.'<br>';
                                     }
 
                                     if (is_array($newValue2)) {
                                         foreach ($newValue2 as $newKey3 => $newValue3) {
                                             if (is_string($newKey3)) {
-                                                echo $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.'<br>';
+                                                $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.'<br>';
                                             }
                                             if (is_numeric($newKey3)) {
-                                                echo $key.' / '.$newKey.' / '.$newKey2.' / '.$newValue3.'<br>';
+                                                $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newValue3.'<br>';
                                             }
 
                                             if (is_array($newValue3)) {
                                                 foreach ($newValue3 as $newKey4 => $newValue4) {
                                                     if (is_string($newKey4)) {
-                                                        echo $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.' / '.$newKey4.'<br>';
+                                                        $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.' / '.$newKey4.'<br>';
                                                     }
                                                     if (is_numeric($newKey4)) {
-                                                        echo $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.' / '.$newValue4.'<br>';
+                                                        $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.' / '.$newValue4.'<br>';
                                                     }
                                                 }
                                             }
+
                                         }
                                     }
 
@@ -128,13 +130,15 @@ class Navbuilder
                     }
                 }
             }
+
+            return $navBuild;
         }
 
         echo '<pre>';
         print_r(moreLoop($navVal, array()));
         echo '</pre>';
 
-        //moreLoop($navVal, '');
+        //moreLoop($navVal, array());
     }
 
     public function __toString()
