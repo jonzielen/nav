@@ -82,6 +82,9 @@ class Navbuilder
                     if (is_numeric($newKey3)) {
                         $navBuild .= $navBuild.' / '.$newValue3.'<br>';
                     }
+                    if (is_array($newValue3)) {
+                        loopCheck($newValue3, $navBuild);
+                    }
                 }
             }
         }
@@ -122,8 +125,8 @@ class Navbuilder
                                                 $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newValue3.'<br>';
                                             }
 
-                                            if (is_array($newValue2)) {
-                                                loopCheck($newValue2, $navBuild);
+                                            if (is_array($newValue3)) {
+                                                loopCheck($newValue3, $navBuild);
                                             }
                                         }
                                     }
@@ -139,9 +142,11 @@ class Navbuilder
             return $navBuild;
         }
 
-        echo '<pre>';
-        print_r(moreLoop($navVal, array()));
-        echo '</pre>';
+        echo moreLoop($navVal, array());
+
+        // echo '<pre>';
+        // print_r(moreLoop($navVal, array()));
+        // echo '</pre>';
 
         //moreLoop($navVal, array());
     }
