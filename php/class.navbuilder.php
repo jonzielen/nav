@@ -8,8 +8,7 @@ class Navbuilder
 
     public function __construct($navArray)
     {
-        $this->navBuilder = '<ul class="nav navbar-nav">'.self::buildNav('', $navArray).'</ul>';
-        self::arrayLoop($navArray);
+        $this->navBuilder = '<ul class="nav navbar-nav">'.self::arrayLoop($navArray, array()).'</ul>';
     }
 
     protected function removeKeySlash($text)
@@ -22,10 +21,12 @@ class Navbuilder
         $replace[] = '/\(.*?\)/';
         $replace[] = '/&/';
         $replace[] = '/ +/';
+        $replace[] = '/~/';
 
         $replacement[] = '';
         $replacement[] = '';
         $replacement[] = ' ';
+        $replacement[] = '/';
 
         $text = preg_replace($replace, $replacement, $text);
 
@@ -45,110 +46,71 @@ class Navbuilder
 
     protected function linkReplace($url, $text)
     {
-        return '<a href="'.self::urlFix($url).'">'.$text.'</a>';
+        return '<a href="/'.self::urlFix($url).'">'.$text.'</a>';
     }
 
-    protected function buildNav($baseUrl, $navVal)
-    {
+    protected function arrayLoop($navVal, $tryArray) {
         $navBuild = '';
 
         foreach ($navVal as $key => $value) {
-            if (is_string($key)) {
-                $navBuild .= '<li>'.self::linkReplace($baseUrl.self::removeKeySlash($key), $key).'';
-                $baseUrl .= $key.'/';
-            }
-
-            if (is_numeric($key)) {
-                $navBuild .= '<li>'.self::linkReplace($baseUrl.self::removeKeySlash($value), $value).'</li>';
-            }
-
             if (is_array($value)) {
-                $navBuild .= '<ul>'.self::buildNav($baseUrl, $value).'</ul></li>';
-                //$baseUrl = '';
+                if (is_string($key)) {
+                    $navBuild .= '<li>'.self::linkReplace(self::removeKeySlash($key), $key);
+                }
+
+                if (is_array($value)) {
+                    $navBuild .= '<ul>';
+                    foreach ($value as $newKey => $newValue) {
+                        if (is_string($newKey)) {
+                            $path = self::removeKeySlash($key.'~'.$newKey);
+                            $navBuild .= '<li>'.self::linkReplace($path, $newKey);
+                        }
+                        if (is_numeric($newKey)) {
+                            $path = self::removeKeySlash($key.'~'.$newValue);
+                            $navBuild .= '<li>'.self::linkReplace($path, $newValue);
+                        }
+
+                        if (is_array($newValue)) {
+                            $navBuild .= '<ul>';
+                            foreach ($newValue as $newKey2 => $newValue2) {
+                                if (is_string($newKey2)) {
+                                    $path = self::removeKeySlash($key.'~'.$newKey.'~'.$newKey2);
+                                    $navBuild .= '<li>'.self::linkReplace($path, $newKey2);
+                                }
+                                if (is_numeric($newKey2)) {
+                                    $path = self::removeKeySlash($key.'~'.$newKey.'~'.$newValue2);
+                                    $navBuild .= '<li>'.self::linkReplace($path, $newValue2);
+                                }
+
+                                if (is_array($newValue2)) {
+                                    $navBuild .= '<ul>';
+                                    foreach ($newValue2 as $newKey3 => $newValue3) {
+                                        if (is_string($newKey3)) {
+                                            $path = self::removeKeySlash($key.'~'.$newKey.'~'.$newKey2.'~'.$newKey3);
+                                            $navBuild .= '<li>'.self::linkReplace($path,$newKey3);
+                                        }
+                                        if (is_numeric($newKey3)) {
+                                            $path = self::removeKeySlash($key.'~'.$newKey.'~'.$newKey2.'~'.$newValue3);
+                                            $navBuild .= '<li>'.self::linkReplace($path, $newValue3);
+                                        }
+
+                                        if (is_array($newValue3)) {
+                                            loopCheck($newValue2, $navBuild);
+                                        }
+                                    }
+                                    $navBuild .= '</ul></li>';
+                                }
+
+                            }
+                            $navBuild .= '</ul></li>';
+                        }
+                    }
+                    $navBuild .= '</ul></li>';
+                }
             }
         }
 
         return $navBuild;
-    }
-
-    protected function arrayLoop($navVal) {
-
-        function loopCheck($newValue2, $navBuild) {
-            if (is_array($newValue2)) {
-                foreach ($newValue2 as $newKey3 => $newValue3) {
-                    if (is_string($newKey3)) {
-                        $navBuild .= $navBuild.' / '.$newKey3.'<br>';
-                    }
-                    if (is_numeric($newKey3)) {
-                        $navBuild .= $navBuild.' / '.$newValue3.'<br>';
-                    }
-                    if (is_array($newValue3)) {
-                        loopCheck($newValue3, $navBuild);
-                    }
-                }
-            }
-        }
-
-        function moreLoop($navVal, $tryArray) {
-            $navBuild = '';
-
-            foreach ($navVal as $key => $value) {
-                if (is_array($value)) {
-                    if (is_string($key)) {
-                        $navBuild .= $key.'<br>';
-                    }
-
-                    if (is_array($value)) {
-                        foreach ($value as $newKey => $newValue) {
-                            if (is_string($newKey)) {
-                                $navBuild .= $key.' / '.$newKey.'<br>';
-                            }
-                            if (is_numeric($newKey)) {
-                                $navBuild .= $key.' / '.$newValue.'<br>';
-                            }
-
-                            if (is_array($newValue)) {
-                                foreach ($newValue as $newKey2 => $newValue2) {
-                                    if (is_string($newKey2)) {
-                                        $navBuild .= $key.' / '.$newKey.' / '.$newKey2.'<br>';
-                                    }
-                                    if (is_numeric($newKey2)) {
-                                        $navBuild .= $key.' / '.$newKey.' / '.$newValue2.'<br>';
-                                    }
-
-                                    if (is_array($newValue2)) {
-                                        foreach ($newValue2 as $newKey3 => $newValue3) {
-                                            if (is_string($newKey3)) {
-                                                $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newKey3.'<br>';
-                                            }
-                                            if (is_numeric($newKey3)) {
-                                                $navBuild .= $key.' / '.$newKey.' / '.$newKey2.' / '.$newValue3.'<br>';
-                                            }
-
-                                            if (is_array($newValue3)) {
-                                                loopCheck($newValue3, $navBuild);
-                                            }
-                                        }
-                                    }
-
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            return $navBuild;
-        }
-
-        echo moreLoop($navVal, array());
-
-        // echo '<pre>';
-        // print_r(moreLoop($navVal, array()));
-        // echo '</pre>';
-
-        //moreLoop($navVal, array());
     }
 
     public function __toString()
