@@ -18,7 +18,7 @@
               <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                    <button class="c-hamburger c-hamburger--htx" data-toggle="collapse" data-target="#mainNav" aria-expanded="false">
+                    <button class="visible-xs c-hamburger c-hamburger--htx" data-toggle="collapse" data-target="#mainNav" aria-expanded="false">
                         <span>toggle menu</span>
                     </button>
                   <a class="navbar-brand" href="/">NYCgo</a>
