@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>test nav</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/main.css" media="screen">
+        <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
         <header>
@@ -18,12 +18,9 @@
               <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNav" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
+                    <button class="c-hamburger c-hamburger--htx" data-toggle="collapse" data-target="#mainNav" aria-expanded="false">
+                        <span>toggle menu</span>
+                    </button>
                   <a class="navbar-brand" href="/">NYCgo</a>
                 </div>
 

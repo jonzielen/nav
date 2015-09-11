@@ -1,52 +1,184 @@
 @import 'compass/css3';
 @import "compass/utilities";
 
-body {
-    
-}
-#mainNav {
-    li ul {
-        display: none;
+// @media (max-device-width: 480px) and (orientation: landscape) {
+//
+// }
+@media (min-width: 768px) {
+    .right-caret:after,
+    .left-caret:after {
+        content: "";
+        border-bottom: 5px solid transparent;
+        border-top: 5px solid transparent;
+        display: inline-block;
+        height: 0;
+        vertical-align: middle;
+        width: 0;
+        margin-left: 5px;
+    }
+    .right-caret:after {
+        border-left: 5px solid #ffaf46;
+    }
+    .left-caret:after {
+        border-right: 5px solid #ffaf46;
     }
     
-    li:hover {
-        & > ul {
-            display: block;
-            position: absolute;
-            padding: 0;
-            margin: 0;
-            list-style: none;
-            border: 1px solid rgba(0,0,0,.15);
-            @include box-shadow(0 6px 12px rgba(0,0,0,.175));
-            @include border-corner-radius(bottom, left, 4px);
-            @include border-corner-radius(bottom, right, 4px);
-            background-color: #fff;
-            width: 202px;
-            
-            li:hover {
-                background-color: #f5f5f5;
-            }
-            
-            a {
+    // main nav styles
+    #mainNav {
+        li ul {
+            display: none;
+        }
+        
+        li:hover {
+            & > ul {
                 display: block;
-                color: #333;
-                padding: 3px 20px;
-                font-weight: 400;
-                margin: 0 -4px;
+                position: absolute;
+                padding: 0;
+                margin: 0;
+                list-style: none;
+                border: 1px solid rgba(0,0,0,.15);
+                @include box-shadow(0 6px 12px rgba(0,0,0,.175));
+                @include border-corner-radius(bottom, left, 4px);
+                @include border-corner-radius(bottom, right, 4px);
+                background-color: #fff;
+                width: 202px;
                 
-                &:hover,
-                &:focus {
-                    text-decoration: none;
+                li:hover {
+                    background-color: #f5f5f5;
                 }
-            }
-            
-            ul {
-                right: -175px;
-                margin: -14px -15px -6px 0;
+                
+                a {
+                    display: block;
+                    color: #333;
+                    padding: 3px 20px;
+                    font-weight: 400;
+                    margin: 0 -4px;
+                    
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+                
+                ul {
+                    right: -175px;
+                    margin: -14px -15px -6px 0;
+                }
             }
         }
     }
+    #mainNav.nav-active {
+        display: block;
+    }
 }
-#mainNav.nav-active {
-    display: block;
+@media (min-width: 992px) {
+    
+}
+@media (min-width: 1200px) {
+    
+}
+
+// vars
+$button-width: 38px; // The width of the button area
+$button-height: 38px; // The height of the button area
+$bar-thickness: 2px; // The thickness of the button bars
+$button-pad: 6px; // The left/right padding between button area and bars.
+$button-bar-space: 4px; // The spacing between button bars
+$button-transistion-duration: 0.3s; // The transition duration
+.navbar-header {
+    .c-hamburger {
+        display: block;
+        position: relative;
+        float: right;
+        overflow: hidden;
+        margin: 6px 15px 0 0;
+        padding: 0;
+        width: $button-width;
+        height: $button-height;
+        font-size: 0;
+        text-indent: -9999px;
+        @include appearance(none);
+        box-shadow: none;
+        @include border-radius(4px);
+        border: 1px solid transparent;
+        cursor: pointer;
+        @include transition(background $button-transistion-duration);
+    }
+    
+    .c-hamburger:focus {
+        outline: none;
+    }
+    
+    .c-hamburger span {
+        display: block;
+        position: absolute;
+        top: ($button-height / 2) - ($bar-thickness / 2) - 1;
+        left: $button-pad;
+        right: $button-pad;
+        height: $bar-thickness;
+        background-color: rgb(255,255,255);
+    }
+    
+    .c-hamburger span::before,
+    .c-hamburger span::after {
+        position: absolute;
+        display: block;
+        left: 0;
+        width: 100%;
+        height: $bar-thickness;
+        background-color: #fff;
+        content: "";
+    }
+    
+    .c-hamburger span::before {
+        top: -$bar-thickness - $button-bar-space;
+    }
+    
+    .c-hamburger span::after {
+        bottom: -$bar-thickness - $button-bar-space;
+    }
+    
+    .c-hamburger--htx {
+        background-color: #333;
+    }
+    
+    .c-hamburger--htx span {
+        @include transition(background 0s $button-transistion-duration);
+    }
+    
+    .c-hamburger--htx span::before,
+    .c-hamburger--htx span::after {
+        @include transition-duration($button-transistion-duration, $button-transistion-duration);
+        @include transition-delay($button-transistion-duration, 0s);
+    }
+    
+    .c-hamburger--htx span::before {
+        @include transition-property(top, transform);
+    }
+    
+    .c-hamburger--htx span::after {
+        @include transition-property(bottom, transform);
+    }
+    
+    .c-hamburger--htx.is-active {
+        background-color: darken(#333, 20%);
+    }
+    
+    .c-hamburger--htx.is-active span {
+        background: none;
+    }
+    
+    .c-hamburger--htx.is-active span::before {
+        top: 0;
+        @include transform(rotate(45deg));
+    }
+    
+    .c-hamburger--htx.is-active span::after {
+        bottom: 0;
+        @include transform(rotate(-45deg));
+    }
+    
+    .c-hamburger--htx.is-active span::before,
+    .c-hamburger--htx.is-active span::after {
+        @include transition-delay(0s, $button-transistion-duration);
+    }
 }
