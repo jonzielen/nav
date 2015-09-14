@@ -16,6 +16,14 @@ class Navbuilder
         return preg_replace('/\//', '-', $text);
     }
 
+    protected function textReplace($text) {
+        $replace[] = '/&/';
+
+        $replacement[] = '&amp;';
+
+        return preg_replace($replace, $replacement, $text);
+    }
+
     protected function replaceChar($text)
     {
         $replace[] = '/\(.*?\)/';
@@ -46,7 +54,7 @@ class Navbuilder
 
     protected function linkReplace($url, $text)
     {
-        return '<a href="/'.self::urlFix($url).'" '.self::addDropdownToLink($text).'>'.$text.'</a>';
+        return '<a href="/'.self::urlFix($url).'" '.self::addDropdownToLink($text).'>'.self::textReplace($text).'</a>';
     }
 
     protected function addDropdownToLi($key, $value) {
@@ -55,7 +63,7 @@ class Navbuilder
 
     protected function addDropdownToLink($key) {
         $innerLink = 'class="dropdown-toggle" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"';
-        return 'id="'.self::urlFix(self::replaceChar($key)).'"';
+        return 'class="'.self::urlFix(self::replaceChar(self::removeKeySlash($key))).'"';
     }
 
     protected function addDropdownToMenu($key, $value) {
