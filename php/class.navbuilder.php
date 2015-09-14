@@ -57,6 +57,10 @@ class Navbuilder
         return '<a href="/'.self::urlFix($url).'" '.self::addDropdownToLink($text).'>'.self::textReplace($text).'</a>';
     }
 
+    protected function firstRowLinkReplace($url, $text) {
+        return '<a href="/'.self::urlFix($url).'" '.self::addDropdownToLink($text).' data-firstRow="true">'.self::textReplace($text).'</a>';
+    }
+
     protected function addDropdownToLi($key, $value) {
         return 'class="dropdown"';
     }
@@ -67,7 +71,8 @@ class Navbuilder
     }
 
     protected function addDropdownToMenu($key, $value) {
-        return 'class="dropdown-menu" aria-labelledby="'.self::urlFix(self::replaceChar($key)).'"';
+        $menu =  'class="dropdown-menu" aria-labelledby="'.self::urlFix(self::replaceChar($key)).'"';
+        return '';
     }
 
     public function loopRecursive($newValue, $basePath, $build = null) {
@@ -100,7 +105,7 @@ class Navbuilder
             if (is_array($value)) {
                 if (is_string($key)) {
                     $dropDown = self::addDropdownToLi($key, $value);
-                    $navBuild .= '<li '.$dropDown.'>'.self::linkReplace(self::removeKeySlash($key), $key);
+                    $navBuild .= '<li '.$dropDown.'>'.self::firstRowLinkReplace(self::removeKeySlash($key), $key);
                 }
 
                 if (is_array($value)) {
