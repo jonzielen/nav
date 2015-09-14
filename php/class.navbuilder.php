@@ -61,6 +61,27 @@ class Navbuilder
         return 'class="dropdown-menu" aria-labelledby="'.self::urlFix(self::replaceChar($key)).'"';
     }
 
+    protected function loopRecursive($newValue2, $basePath) {
+        $navBuild = '<ul>';
+        foreach ($newValue2 as $newKey3 => $newValue3) {
+            if (is_string($newKey3)) {
+                $path = self::removeKeySlash($basePath.'~'.$newKey3);
+                $navBuild .= '<li>'.self::linkReplace($path,$newKey3);
+            }
+            if (is_numeric($newKey3)) {
+                $path = self::removeKeySlash($basePath.'~'.$newValue3);
+                $navBuild .= '<li>'.self::linkReplace($path, $newValue3);
+            }
+
+            if (is_array($newValue3)) {
+                loopCheck($newValue2, $navBuild);
+            }
+        }
+        $navBuild .= '</ul></li>';
+
+        return $navBuild;
+    }
+
     protected function arrayLoop($navVal, $tryArray) {
         $navBuild = '';
         $dropDown = '';
@@ -101,22 +122,7 @@ class Navbuilder
                                 }
 
                                 if (is_array($newValue2)) {
-                                    $navBuild .= '<ul>';
-                                    foreach ($newValue2 as $newKey3 => $newValue3) {
-                                        if (is_string($newKey3)) {
-                                            $path = self::removeKeySlash($key.'~'.$newKey.'~'.$newKey2.'~'.$newKey3);
-                                            $navBuild .= '<li>'.self::linkReplace($path,$newKey3);
-                                        }
-                                        if (is_numeric($newKey3)) {
-                                            $path = self::removeKeySlash($key.'~'.$newKey.'~'.$newKey2.'~'.$newValue3);
-                                            $navBuild .= '<li>'.self::linkReplace($path, $newValue3);
-                                        }
-
-                                        if (is_array($newValue3)) {
-                                            loopCheck($newValue2, $navBuild);
-                                        }
-                                    }
-                                    $navBuild .= '</ul></li>';
+                                    $navBuild .= self::loopRecursive($newValue2,$path);
                                 }
 
                             }
