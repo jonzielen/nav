@@ -54,32 +54,34 @@ class Navbuilder
     }
 
     protected function addDropdownToLink($key) {
-        return 'id="'.self::urlFix(self::replaceChar($key)).'" class="dropdown-toggle" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"';
+        $innerLink = 'class="dropdown-toggle" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"';
+        return 'id="'.self::urlFix(self::replaceChar($key)).'"';
     }
 
     protected function addDropdownToMenu($key, $value) {
         return 'class="dropdown-menu" aria-labelledby="'.self::urlFix(self::replaceChar($key)).'"';
     }
 
-    protected function loopRecursive($newValue2, $basePath) {
-        $navBuild = '<ul>';
-        foreach ($newValue2 as $newKey3 => $newValue3) {
-            if (is_string($newKey3)) {
-                $path = self::removeKeySlash($basePath.'~'.$newKey3);
-                $navBuild .= '<li>'.self::linkReplace($path,$newKey3);
+    public function loopRecursive($newValue, $basePath, $build = null) {
+        $build .= '<ul>';
+        foreach ($newValue as $newKey => $newValue) {
+            if (is_string($newKey)) {
+                $path = self::removeKeySlash($basePath.'~'.$newKey);
+                $build .= '<li>'.self::linkReplace($path, $newKey);
             }
-            if (is_numeric($newKey3)) {
-                $path = self::removeKeySlash($basePath.'~'.$newValue3);
-                $navBuild .= '<li>'.self::linkReplace($path, $newValue3);
+            if (is_numeric($newKey)) {
+                $path = self::removeKeySlash($basePath.'~'.$newValue);
+                $build .= '<li>'.self::linkReplace($path, $newValue);
             }
 
-            if (is_array($newValue3)) {
-                loopCheck($newValue2, $navBuild);
+            if (is_array($newValue)) {
+                $path = self::removeKeySlash($basePath.'~'.$newKey);
+                $build = self::loopRecursive($newValue, $path, $build);
             }
         }
-        $navBuild .= '</ul></li>';
+        $build .= '</ul></li>';
 
-        return $navBuild;
+        return $build;
     }
 
     protected function arrayLoop($navVal, $tryArray) {
@@ -89,47 +91,12 @@ class Navbuilder
         foreach ($navVal as $key => $value) {
             if (is_array($value)) {
                 if (is_string($key)) {
-                    if (is_array($value)) {
-                        $dropDown = self::addDropdownToLi($key, $value);
-                    }
-
+                    $dropDown = self::addDropdownToLi($key, $value);
                     $navBuild .= '<li '.$dropDown.'>'.self::linkReplace(self::removeKeySlash($key), $key);
                 }
 
                 if (is_array($value)) {
-
-                    $navBuild .= '<ul '.self::addDropdownToMenu($key, $value).'>';
-                    foreach ($value as $newKey => $newValue) {
-                        if (is_string($newKey)) {
-                            $path = self::removeKeySlash($key.'~'.$newKey);
-                            $navBuild .= '<li>'.self::linkReplace($path, $newKey);
-                        }
-                        if (is_numeric($newKey)) {
-                            $path = self::removeKeySlash($key.'~'.$newValue);
-                            $navBuild .= '<li>'.self::linkReplace($path, $newValue);
-                        }
-
-                        if (is_array($newValue)) {
-                            $navBuild .= '<ul>';
-                            foreach ($newValue as $newKey2 => $newValue2) {
-                                if (is_string($newKey2)) {
-                                    $path = self::removeKeySlash($key.'~'.$newKey.'~'.$newKey2);
-                                    $navBuild .= '<li>'.self::linkReplace($path, $newKey2);
-                                }
-                                if (is_numeric($newKey2)) {
-                                    $path = self::removeKeySlash($key.'~'.$newKey.'~'.$newValue2);
-                                    $navBuild .= '<li>'.self::linkReplace($path, $newValue2);
-                                }
-
-                                if (is_array($newValue2)) {
-                                    $navBuild .= self::loopRecursive($newValue2,$path);
-                                }
-
-                            }
-                            $navBuild .= '</ul></li>';
-                        }
-                    }
-                    $navBuild .= '</ul></li>';
+                    $navBuild .= self::loopRecursive($value,$key);
                 }
             }
         }
